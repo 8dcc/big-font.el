@@ -29,19 +29,18 @@
 (defvar big-font-face nil
   "The font to use for `big-font-mode'.
 
-If nil, `default' will be used, and the height will be set to `big-font-height'.
-
-See also `defface' and `set-frame-font'.")
+If nil, `default' will be used, and the height will be set to
+`big-font-height'. See also `defface' and `set-frame-font'.")
 
 ;;;###autoload
 (defvar big-font-height 200
   "The height for the `default' face if `big-font-face' is nil and
-  `big-font-mode' is enabled.")
+`big-font-mode' is enabled.")
 
 ;;;###autoload
 (defun big-font--enable ()
   (if big-font-face
-      (add-to-list 'face-remapping-alist '(default big-font-face))
+      (add-to-list 'face-remapping-alist `(default . ,big-font-face))
     (add-to-list 'face-remapping-alist `(default (:height ,big-font-height)))))
 
 ;;;###autoload
