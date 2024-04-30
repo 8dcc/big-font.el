@@ -55,7 +55,8 @@ The :height property of the faces will be overwritten with
           big-font-other-targets)
   (if big-font-face
       (add-to-list 'face-remapping-alist `(default ,big-font-face default))
-    (add-to-list 'face-remapping-alist `(default (:height ,big-font-height)))))
+    (add-to-list 'face-remapping-alist `(default (:height ,big-font-height))))
+  (redisplay))
 
 ;;;###autoload
 (defun big-font--disable ()
@@ -75,7 +76,8 @@ The :height property of the faces will be overwritten with
           (seq-remove (lambda (x)
                         (and (listp x)
                              (equal x `(default (:height ,big-font-height)))))
-                      face-remapping-alist))))
+                      face-remapping-alist)))
+  (redisplay))
 
 ;;;###autoload
 (define-minor-mode big-font-mode
