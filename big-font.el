@@ -42,7 +42,7 @@ See also `defface' and `set-frame-font'.")
 (defun big-font--enable ()
   (if big-font-face
       (add-to-list 'face-remapping-alist '(default . big-font-face))
-    (add-to-list 'face-remapping-alist `(default . (height ,big-font-height)))))
+    (add-to-list 'face-remapping-alist `(default (:height ,big-font-height)))))
 
 ;;;###autoload
 (defun big-font--disable ()
@@ -53,7 +53,7 @@ See also `defface' and `set-frame-font'.")
                         face-remapping-alist))
     (setq face-remapping-alist
           (seq-remove (lambda (x)
-                        (equal (caddr x) 'big-font-height))
+                        (equal (cdadr x) 'big-font-height))
                       face-remapping-alist))))
 
 ;;;###autoload
