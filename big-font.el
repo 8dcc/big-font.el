@@ -35,13 +35,13 @@ See also `defface' and `set-frame-font'.")
 
 ;;;###autoload
 (defvar big-font-height 200
-  "The height for the `default' face if `big-font-mode' is enabled and
-`big-font' is nil.")
+  "The height for the `default' face if `big-font-face' is nil and
+  `big-font-mode' is enabled.")
 
 ;;;###autoload
 (defun big-font--enable ()
   (if big-font-face
-      (add-to-list 'face-remapping-alist '(default . big-font-face))
+      (add-to-list 'face-remapping-alist '(default big-font-face))
     (add-to-list 'face-remapping-alist `(default (:height ,big-font-height)))))
 
 ;;;###autoload
@@ -53,7 +53,7 @@ See also `defface' and `set-frame-font'.")
                         face-remapping-alist))
     (setq face-remapping-alist
           (seq-remove (lambda (x)
-                        (equal (cdadr x) 'big-font-height))
+                        (equal (cadr x) `(:height ,big-font-height)))
                       face-remapping-alist))))
 
 ;;;###autoload
