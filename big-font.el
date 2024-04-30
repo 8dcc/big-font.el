@@ -26,26 +26,45 @@
 ;;; Code:
 
 ;;;###autoload
-(defvar big-font-face nil
-  "The font to use for `big-font-mode'.
+(defvar big-font-default-face nil
+  "The font to use by default in `big-font-mode'.
 
-If nil, `default' will be used, and the height will be set to
-`big-font-height'. See also `defface' and `set-frame-font'.")
+If nil, only the height of `default' will be set to `big-font-height'. The
+heights of other faces in `big-font-other-targets' will be overwritten as well.
+
+For creating a font face, see `defface'.")
 
 ;;;###autoload
-(defvar big-font-height 200
+(defvar big-font-height 150
   "The height for the `default' face if `big-font-face' is nil and
 `big-font-mode' is enabled.")
 
 ;;;###autoload
+(defvar big-font-other-targets '(variable-pitch)
+  "List of target faces for overriding the height when `big-font-mode' is
+enabled.
+
+The :height property of the faces will be overwritten with
+`big-font-height'. The `default' face is implicit.")
+
+;;;###autoload
 (defun big-font--enable ()
+  (mapcar (lambda (current-face)
+            (add-to-list 'face-remapping-alist
+                         `(,current-face (:height ,big-font-height))))
+          big-font-other-targets)
   (if big-font-face
       (add-to-list 'face-remapping-alist `(default ,big-font-face default))
-    (add-to-list 'face-remapping-alist `(default (:height ,big-font-height))))
-  (add-to-list 'face-remapping-alist `(variable-pitch (:height ,big-font-height))))
+    (add-to-list 'face-remapping-alist `(default (:height ,big-font-height)))))
 
 ;;;###autoload
 (defun big-font--disable ()
+  (setq face-remapping-alist
+        (seq-remove (lambda (x)
+                      (and (listp x)
+                           (member (car x) big-font-other-targets)
+                           (equal  (cadr x) `(:height ,big-font-height))))
+                    face-remapping-alist))
   (if big-font-face
       (setq face-remapping-alist
             (seq-remove (lambda (x)
@@ -56,12 +75,7 @@ If nil, `default' will be used, and the height will be set to
           (seq-remove (lambda (x)
                         (and (listp x)
                              (equal x `(default (:height ,big-font-height)))))
-                      face-remapping-alist)))
-  (setq face-remapping-alist
-        (seq-remove (lambda (x)
-                      (and (listp x)
-                           (equal x `(variable-pitch (:height ,big-font-height)))))
-                    face-remapping-alist)))
+                      face-remapping-alist))))
 
 ;;;###autoload
 (define-minor-mode big-font-mode
