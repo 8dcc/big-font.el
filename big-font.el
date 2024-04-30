@@ -64,7 +64,7 @@ Uses `big-font' if its set, otherwise scales `default' to `big-font-height'."
   :init-value nil
   :lighter " Big"
   :global t
-  (if big-font
+  (if big-font-mode
       (big-font--enable)
     (big-font--disable)))
 
