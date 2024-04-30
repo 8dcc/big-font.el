@@ -40,20 +40,28 @@ If nil, `default' will be used, and the height will be set to
 ;;;###autoload
 (defun big-font--enable ()
   (if big-font-face
-      (add-to-list 'face-remapping-alist `(default . ,big-font-face))
-    (add-to-list 'face-remapping-alist `(default (:height ,big-font-height)))))
+      (add-to-list 'face-remapping-alist `(default ,big-font-face default))
+    (add-to-list 'face-remapping-alist `(default (:height ,big-font-height))))
+  (add-to-list 'face-remapping-alist `(variable-pitch (:height ,big-font-height))))
 
 ;;;###autoload
 (defun big-font--disable ()
   (if big-font-face
       (setq face-remapping-alist
             (seq-remove (lambda (x)
-                          (equal (cdr x) 'big-font-face))
+                          (and (listp x)
+                               (equal x `(default ,big-font-face default))))
                         face-remapping-alist))
     (setq face-remapping-alist
           (seq-remove (lambda (x)
-                        (equal (cadr x) `(:height ,big-font-height)))
-                      face-remapping-alist))))
+                        (and (listp x)
+                             (equal x `(default (:height ,big-font-height)))))
+                      face-remapping-alist)))
+  (setq face-remapping-alist
+        (seq-remove (lambda (x)
+                      (and (listp x)
+                           (equal x `(variable-pitch (:height ,big-font-height)))))
+                    face-remapping-alist)))
 
 ;;;###autoload
 (define-minor-mode big-font-mode
