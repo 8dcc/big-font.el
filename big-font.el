@@ -69,7 +69,7 @@ The :height property of the faces will be overwritten with
       (setq face-remapping-alist
             (seq-remove (lambda (x)
                           (and (listp x)
-                               (equal x `(default ,big-font-face default))))
+                               (member big-font-face x)))
                         face-remapping-alist))
     (setq face-remapping-alist
           (seq-remove (lambda (x)
