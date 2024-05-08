@@ -43,7 +43,7 @@ enabled. The family should be a string.")
 (defun big-font--enable ()
   (if big-font-height
       (progn
-        (setq big-font--normal-height (face-attribute :height))
+        (setq big-font--normal-height (face-attribute 'default :height))
         (set-face-attribute 'default nil :height big-font-height)))
   (if big-font-family-alist
       (progn
