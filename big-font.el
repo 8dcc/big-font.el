@@ -37,15 +37,15 @@ enabled. The family should be a string.")
 (defvar big-font--normal-height 80
   "The last user height of the default face before enabling `big-font-mode'")
 
-(defvar big-font--normal-families 80
+(defvar big-font--normal-families nil
   "The last user height of the default face before enabling `big-font-mode'")
 
 (defun big-font--enable ()
-  (if (big-font-height)
+  (if big-font-height
       (progn
         (setq big-font--normal-height (face-attribute :height))
         (set-face-attribute 'default nil :height big-font-height)))
-  (if (big-font-family-alist)
+  (if big-font-family-alist
       (progn
         (setq big-font--normal-families nil)
         (dolist (target big-font-family-alist)
