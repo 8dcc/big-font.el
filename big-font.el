@@ -26,58 +26,37 @@
 ;;; Code:
 
 ;;;###autoload
-(defvar big-font-default-face nil
-  "The font to use by default in `big-font-mode'.
-
-If nil, only the height of `default' will be set to `big-font-height'. The
-heights of other faces in `big-font-other-targets' will be overwritten as well.
-
-For creating a font face, see `defface'.")
-
-;;;###autoload
 (defvar big-font-height 150
-  "The height for the `default' face if `big-font-face' is nil and
-`big-font-mode' is enabled.")
+  "The font height for the default face when `big-font-mode' is enabled.")
 
 ;;;###autoload
-(defvar big-font-other-targets '(variable-pitch)
-  "List of target faces for overriding the height when `big-font-mode' is
-enabled.
+(defvar big-font-family-alist nil
+  "Alist of (FACE . FAMILY) that will be overwritten when `big-font-mode' is
+enabled. The family should be a string.")
 
-The :height property of the faces will be overwritten with
-`big-font-height'. The `default' face is implicit.")
+(defvar big-font--normal-height 80
+  "The last user height of the default face before enabling `big-font-mode'")
 
-;;;###autoload
+(defvar big-font--normal-families 80
+  "The last user height of the default face before enabling `big-font-mode'")
+
 (defun big-font--enable ()
-  (mapcar (lambda (current-face)
-            (add-to-list 'face-remapping-alist
-                         `(,current-face (:height ,big-font-height))))
-          big-font-other-targets)
-  (if big-font-face
-      (add-to-list 'face-remapping-alist `(default ,big-font-face default))
-    (add-to-list 'face-remapping-alist `(default (:height ,big-font-height))))
-  (redisplay))
+  (if (big-font-height)
+      (progn
+        (setq big-font--normal-height (face-attribute :height))
+        (set-face-attribute 'default nil :height big-font-height)))
+  (if (big-font-family-alist)
+      (progn
+        (setq big-font--normal-families nil)
+        (dolist (target big-font-family-alist)
+          (add-to-list big-font--normal-families target 'append))
+        (dolist (target big-font-family-alist)
+          (set-face-attribute (car target) nil :family (cdr target))))))
 
-;;;###autoload
 (defun big-font--disable ()
-  (setq face-remapping-alist
-        (seq-remove (lambda (x)
-                      (and (listp x)
-                           (member (car x) big-font-other-targets)
-                           (equal  (cadr x) `(:height ,big-font-height))))
-                    face-remapping-alist))
-  (if big-font-face
-      (setq face-remapping-alist
-            (seq-remove (lambda (x)
-                          (and (listp x)
-                               (member big-font-face x)))
-                        face-remapping-alist))
-    (setq face-remapping-alist
-          (seq-remove (lambda (x)
-                        (and (listp x)
-                             (equal x `(default (:height ,big-font-height)))))
-                      face-remapping-alist)))
-  (redisplay))
+  (set-face-attribute 'default nil :height big-font--normal-height)
+  (dolist (target big-font--normal-families)
+    (set-face-attribute (car target) nil :family (cdr target))))
 
 ;;;###autoload
 (define-minor-mode big-font-mode
