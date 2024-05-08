@@ -49,7 +49,10 @@ enabled. The family should be a string.")
       (progn
         (setq big-font--normal-families nil)
         (dolist (target big-font-family-alist)
-          (add-to-list 'big-font--normal-families target 'append))
+          (add-to-list 'big-font--normal-families
+                       (cons (car target)
+                             (face-attribute (car target) :family))
+                       'append))
         (dolist (target big-font-family-alist)
           (set-face-attribute (car target) nil :family (cdr target))))))
 
