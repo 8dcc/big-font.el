@@ -58,8 +58,10 @@ enabled. The family should be a string.")
 
 (defun big-font--disable ()
   (set-face-attribute 'default nil :height big-font--normal-height)
+  (setq big-font--normal-height nil)
   (dolist (target big-font--normal-families)
-    (set-face-attribute (car target) nil :family (cdr target))))
+    (set-face-attribute (car target) nil :family (cdr target)))
+  (setq big-font--normal-families nil))
 
 ;;;###autoload
 (define-minor-mode big-font-mode
