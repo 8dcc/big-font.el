@@ -69,7 +69,6 @@ enabled. The family should be a string.")
 
 Uses `big-font' if its set, otherwise scales `default' to `big-font-height'."
   :init-value nil
-  :lighter " Big"
   :global t
   (if big-font-mode
       (big-font--enable)
