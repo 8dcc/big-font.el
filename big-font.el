@@ -25,14 +25,22 @@
 
 ;;; Code:
 
-;;;###autoload
-(defvar big-font-height 150
-  "The font height for the default face when `big-font-mode' is enabled.")
+(defgroup big-font ()
+  "Toggle to a big font face."
+  :group 'font)
 
-;;;###autoload
-(defvar big-font-family-alist nil
+(defcustom big-font-height 150
+  "The font height for the default face when `big-font-mode' is enabled."
+  :group 'big-font
+  :type 'integer
+  :risky t)
+
+(defcustom big-font-family-alist nil
   "Alist of (FACE . FAMILY) that will be overwritten when `big-font-mode' is
-enabled. The family should be a string.")
+enabled. The family should be a string."
+  :group 'big-font
+  :type '(alist :key-type face :value-type string)
+  :risky t)
 
 (defvar big-font--normal-height 80
   "The last user height of the default face before enabling `big-font-mode'")
