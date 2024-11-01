@@ -40,13 +40,14 @@ HEIGHT an integer, and the FAMILY a string.
 Note that the FAMILY is optional and can be nil.  Therefore, each entry can have
 the form (FACE HEIGHT)."
   :group 'big-font
-  :type '(list (face :tag "Face")
-               (choice :tag "Height"
-                       (const :tag "Inherit" nil)
-                       integer)
-               (choice :tag "Family"
-                       (const :tag "Inherit" nil)
-                       string))
+  :type '(repeat
+          (list (face :tag "Face")
+                (choice :tag "Height"
+                        (const :tag "Inherit" nil)
+                        integer)
+                (choice :tag "Family"
+                        (const :tag "Inherit" nil)
+                        string)))
   :risky t)
 
 (defvar big-font--old-faces nil
