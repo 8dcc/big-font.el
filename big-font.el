@@ -19,63 +19,82 @@
 
 ;;; Commentary:
 
-;; This package was inspired by doom emacs' big-font-mode. For an example of how
-;; set-up this package, see my personal dotfiles:
+;; This package was inspired by doom Emacs' big-font-mode.  For an example of
+;; how set-up this package, see my personal dotfiles:
 ;;   https://github.com/8dcc/emacs-dotfiles
 
 ;;; Code:
 
 (defgroup big-font ()
-  "Toggle to a big font face."
-  :group 'font)
+  "Minor mode for using bigger fonts globally."
+  :group 'faces
+  :prefix "big-font-")
 
-(defcustom big-font-height 150
-  "The font height for the default face when `big-font-mode' is enabled."
+(defcustom big-font-faces '((default 120 nil))
+  "Alist of (FACE HEIGHT FAMILY) used by `big-font-mode'.
+
+Each entry will be used for overwriting the :height and :family properties of
+the specified FACE using `set-face-attribute'.  The FACE should be a symbol, the
+HEIGHT an integer, and the FAMILY a string.
+
+Note that the FAMILY is optional and can be nil.  Therefore, each entry can have
+the form (FACE HEIGHT)."
   :group 'big-font
-  :type 'integer
+  :type '(list (face :tag "Face")
+               (choice :tag "Height"
+                       (const :tag "Inherit" nil)
+                       integer)
+               (choice :tag "Family"
+                       (const :tag "Inherit" nil)
+                       string))
   :risky t)
 
-(defcustom big-font-family-alist nil
-  "Alist of (FACE . FAMILY) that will be overwritten when `big-font-mode' is
-enabled. The family should be a string."
-  :group 'big-font
-  :type '(alist :key-type face :value-type string)
-  :risky t)
+(defvar big-font--old-faces nil
+  "The last user values before enabling `big-font-mode'.
 
-(defvar big-font--normal-height 80
-  "The last user height of the default face before enabling `big-font-mode'")
-
-(defvar big-font--normal-families nil
-  "The last user height of the default face before enabling `big-font-mode'")
+This list has the same format as `big-font-faces'.")
 
 (defun big-font--enable ()
-  (if big-font-height
-      (progn
-        (setq big-font--normal-height (face-attribute 'default :height))
-        (set-face-attribute 'default nil :height big-font-height)))
-  (if big-font-family-alist
-      (progn
-        (setq big-font--normal-families nil)
-        (dolist (target big-font-family-alist)
-          (add-to-list 'big-font--normal-families
-                       (cons (car target)
-                             (face-attribute (car target) :family))
-                       'append))
-        (dolist (target big-font-family-alist)
-          (set-face-attribute (car target) nil :family (cdr target))))))
+  "Enable `big-font-mode'."
+  (setq big-font--old-faces nil)
+  (dolist (element big-font-faces)
+    (let ((face   (car   element))
+          (height (cadr  element))
+          (family (caddr element)))
+      (if (null face)
+          (error "Invalid face in `big-font-faces'"))
+      (add-to-list 'big-font--old-faces
+                   (list face
+                         (face-attribute face :height)
+                         (face-attribute face :family))
+                   'append)
+      (if height
+          (set-face-attribute face nil :height height))
+      (if family
+          (set-face-attribute face nil :family family)))))
 
 (defun big-font--disable ()
-  (set-face-attribute 'default nil :height big-font--normal-height)
-  (setq big-font--normal-height nil)
-  (dolist (target big-font--normal-families)
-    (set-face-attribute (car target) nil :family (cdr target)))
-  (setq big-font--normal-families nil))
+  "Disable `big-font-mode'."
+  (dolist (element big-font--old-faces)
+    (let ((face   (car   element))
+          (height (cadr  element))
+          (family (caddr element)))
+      (if (null face)
+          (error "Invalid face in `big-font--old-faces'"))
+      (if height
+          (set-face-attribute face nil :height height))
+      (if family
+          (set-face-attribute face nil :family family))))
+  (setq big-font--old-faces nil))
 
 ;;;###autoload
 (define-minor-mode big-font-mode
-  "Globally resizes your fonts for business presentations.
+  "Minor mode for using bigger fonts globally.
 
-Uses `big-font' if its set, otherwise scales `default' to `big-font-height'."
+Overwrites the height and family on an arbitrary number of faces, globally.  See
+the `big-font-faces' variable for more information.
+
+Useful for business presentations."
   :init-value nil
   :global t
   (if big-font-mode
