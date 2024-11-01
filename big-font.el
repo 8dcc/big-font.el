@@ -31,14 +31,14 @@
   :prefix "big-font-")
 
 (defcustom big-font-faces '((default 120 nil))
-  "Alist of (FACE HEIGHT FAMILY) used by `big-font-mode'.
+  "List of elements (FACE HEIGHT FAMILY) used by `big-font-mode'.
 
 Each entry will be used for overwriting the :height and :family properties of
 the specified FACE using `set-face-attribute'.  The FACE should be a symbol, the
 HEIGHT an integer, and the FAMILY a string.
 
-Note that the FAMILY is optional and can be nil.  Therefore, each entry can have
-the form (FACE HEIGHT)."
+Note that the FACE is mandatory, but the HEIGHT and FAMILY are both optional and
+can be nil."
   :group 'big-font
   :type '(repeat
           (list (face :tag "Face")
