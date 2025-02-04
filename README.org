@@ -1,0 +1,43 @@
+#+TITLE: big-font.el
+#+AUTHOR: 8dcc
+#+OPTIONS: toc:2
+#+STARTUP: nofold
+
+*Minor mode for switching to a bigger font globally.*
+
+Useful for business™ presentations.
+
+* Installing
+
+This package is not available in Melpa, but you can install it with
+=package-vc-install=:
+
+#+begin_src emacs-lisp
+(package-vc-install "https://github.com/8dcc/big-font.el")
+#+end_src
+
+Alternatively, if you are using [[https://github.com/radian-software/straight.el][straight.el]], you can specify the recipe with
+=straight-use-package=:
+
+#+begin_src emacs-lisp
+(straight-use-package
+ '(big-font :type git :host github :repo "8dcc/big-font.el"))
+#+end_src
+
+* Customizing
+
+The following variables can be customized.
+
+- Variable: big-font-faces ::
+
+  List of elements ~(FACE HEIGHT FAMILY)~ used by =big-font-mode=.
+
+  Each entry will be used for overwriting the =:height= and =:family= properties of
+  the specified FACE using =set-face-attribute=. The =FACE= should be a symbol, the
+  =HEIGHT= an integer, and the =FAMILY= a string.
+
+  Note that the =FACE= is mandatory, but the =HEIGHT= and =FAMILY= are both optional
+  and can be =nil=.
+
+  By default, this variable configured to simply set the height of the default
+  font to 120 (i.e. 12pt).
