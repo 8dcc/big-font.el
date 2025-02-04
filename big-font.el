@@ -1,27 +1,26 @@
-;;; big-font.el --- Minor emacs mode for changing the font face temporarily -*- lexical-binding: t; -*-
+;;; big-font.el --- Minor mode for switching to a bigger font globally -*- lexical-binding: t; -*-
 
 ;; Author: 8dcc <8dcc.git@gmail.com>
 ;; Version: 1.0.0
+;; Package-Requires: ((emacs "24.1"))
 ;; URL: https://github.com/8dcc/big-font.el
 
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or
-;; any later version.
-
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; This program is free software; you can redistribute it and/or modify it under
+;; the terms of the GNU General Public License as published by the Free Software
+;; Foundation, either version 3 of the License, or any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but WITHOUT
+;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+;; FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+;; details.
+;;
+;; You should have received a copy of the GNU General Public License along with
+;; this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
-;; This package was inspired by doom Emacs' big-font-mode.  For an example of
-;; how set-up this package, see my personal dotfiles:
-;;   https://github.com/8dcc/emacs-dotfiles
+;; This package was inspired by doom Emacs' `doom-big-font-mode':
+;; https://github.com/doomemacs/doomemacs/blob/2bc052425ca45a41532be0648ebd976d1bd2e6c1/lisp/lib/fonts.el#L163
 
 ;;; Code:
 
@@ -90,12 +89,12 @@ This list has the same format as `big-font-faces'.")
 
 ;;;###autoload
 (define-minor-mode big-font-mode
-  "Minor mode for using bigger fonts globally.
+  "Minor mode for switching to a bigger font globally.
 
 Overwrites the height and family on an arbitrary number of faces, globally.  See
 the `big-font-faces' variable for more information.
 
-Useful for business presentations."
+Useful for business(TM) presentations."
   :init-value nil
   :global t
   (if big-font-mode
